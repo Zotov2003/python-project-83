@@ -4,14 +4,13 @@ version = "0.1.0"
 description = "Page Analyzer is a simple web application that checks the basic page-level elements of websites valuable for on-page SEO."
 authors = ["Max <baiter159159@gmail.com>"]
 readme = "README.md"
-
 packages = [
     { include = "page_analyzer" },
 ]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-flask = "^3.1.0"
+flask = "^3.0.3"
 python-dotenv = "^1.0.1"
 gunicorn = "^21.2.0"
 psycopg2-binary = "^2.9.9"
@@ -20,7 +19,6 @@ requests = "^2.31.0"
 beautifulsoup4 = "^4.12.3"
 celery = "^5.4.0"
 redis = "^5.0.4"
-ruff = "^0.8.4"
 
 [tool.poetry.group.dev.dependencies]
 flake8 = "^7.0.0"
