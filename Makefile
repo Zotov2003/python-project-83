@@ -1,4 +1,4 @@
-install:app
+install:
 	poetry install
 
 debug-mode:
