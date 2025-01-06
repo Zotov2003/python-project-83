@@ -10,7 +10,7 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.12.3"
+python = "^3.10"
 flask = "^3.1.0"
 python-dotenv = "^1.0.1"
 gunicorn = "^21.2.0"
