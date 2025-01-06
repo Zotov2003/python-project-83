@@ -19,6 +19,7 @@ requests = "^2.31.0"
 beautifulsoup4 = "^4.12.3"
 celery = "^5.4.0"
 redis = "^5.0.4"
+uv = "^0.5.14"
 
 [tool.poetry.group.dev.dependencies]
 flake8 = "^7.0.0"
