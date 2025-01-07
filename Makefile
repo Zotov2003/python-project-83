@@ -2,7 +2,7 @@ install:
 	uv sync
 
 debug-mode:
-	poetry run flask --app page_analyzer:app --debug run --port 8000
+	uv run flask --app page_analyzer:app --debug run --port 8000
 
 dev:
 	uv run flask --debug --app page_analyzer:app run
@@ -18,10 +18,10 @@ build:
 	./build.sh
 
 lint:
-	poetry run flake8 page_analyzer
+	uv run flake8 page_analyzer
 
 test:
-	poetry run pytest
+	uv run pytest
 
 check:
 	ruff check --fix --select I
