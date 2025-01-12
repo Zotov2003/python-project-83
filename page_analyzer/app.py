@@ -46,15 +46,17 @@ def add_url():
     error = validate(new_url)
     if error:
         flash(error, 'danger')
-        return render_template('index.html'), 422
+        return jsonify({'error': error}), 422
 
-    url_data = repo.add_url_to_db_with_returning(normalized_url)
+    url_data = repo.get_url_by_name(normalized_url)
     if url_data:
-        flash('Страница успешно добавлена', 'success')
-        return redirect(url_for('show_url', id=url_data.id))
-    else:
-        flash('Ошибка при добавлении страницы', 'danger')
-        return redirect(url_for('page_analyzer'))
+        flash('Страница уже существует', 'primary')
+        return jsonify({'error': 'Страница уже существует'}), 400
+
+    repo.add_url_to_db(normalized_url)
+    new_url_data = repo.get_url_by_name(normalized_url)
+    flash('Страница успешно добавлена', 'success')
+    return jsonify({'message': 'Страница успешно добавлена'}), 200
 
 @app.get('/urls')
 def show_all_urls():
