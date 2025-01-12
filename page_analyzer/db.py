@@ -30,7 +30,11 @@ class DatabaseRepository:
         self.execute("INSERT INTO urls (name) VALUES (%s)", (url,))
 
     def get_url_by_name(self, url):
-        return self.fetch_all("SELECT * FROM urls WHERE name = %s", (url,))[0]
+        results = self.fetch_all("SELECT * FROM urls WHERE name = %s", (url,))
+        if results:
+            return results[0]
+        else:
+            return None
 
     def get_url_by_id(self, url_id):
         return self.fetch_all("SELECT * FROM urls WHERE id = %s", (url_id,))[0]
