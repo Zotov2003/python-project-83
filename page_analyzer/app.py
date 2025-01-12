@@ -9,6 +9,7 @@ from flask import (
     get_flashed_messages,
     redirect
 )
+from urllib.parse import urlparse
 from page_analyzer.db import DatabaseRepository
 from page_analyzer.helpers import fetch_url_data
 from page_analyzer.tasks import async_check_all_urls
