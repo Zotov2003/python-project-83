@@ -1,8 +1,12 @@
 {% extends "layout.html" %}
 {% block sidebar %}
-{% if message %}
-<div class="alert alert-{{ message[0][0] }} d-flex" role="alert">{{ message[0][1] }}</div>
-{% endif %}
+{% with flashed_messages = get_flashed_messages(with_categories=true) %}
+    {% if flashed_messages %}
+        {% for category, message in flashed_messages %}
+            <div class="alert alert-{{ category }} d-flex" role="alert">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
 {% endblock sidebar %}
 {% block content %}
 <div class="row">
