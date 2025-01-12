@@ -52,12 +52,18 @@ def add_url():
     url_data = repo.get_url_by_name(normalized_url)
     if url_data:
         flash('Страница уже существует', 'primary')
+        return redirect(url_for('page_analyzer'))
     else:
-        repo.add_url_to_db(normalized_url)
-        new_url_data = repo.get_url_by_name(normalized_url)
-        flash('Страница успешно добавлена', 'success')
+        try:
+            repo.add_url_to_db(normalized_url)
+            new_url_data = repo.get_url_by_name(normalized_url)
+            flash('Страница успешно добавлена', 'success')
+        except Exception as e:
+            flash(f'Ошибка при добавлении URL: {str(e)}', 'danger')
+            return redirect(url_for('page_analyzer'))
 
     return redirect(url_for('page_analyzer'))
+
 
 @app.get('/urls')
 def show_all_urls():
