@@ -30,11 +30,6 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 
-def format_url(new_url):
-    parsed_url = urlparse(new_url)
-    return f"{parsed_url.scheme}://{parsed_url.netloc}"
-
-
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
@@ -70,7 +65,8 @@ def add_url():
         flash('Страница уже существует', 'primary')
         return redirect(url_for('show_url', id=url_data.id))
 
-    new_url_data = add_url_to_db(normal_url)
+    add_url_to_db(normal_url)
+    new_url_data = get_url_by_name(normal_url)
 
     flash('Страница успешно добавлена', 'success')
     return redirect(url_for('show_url', id=new_url_data.id))
