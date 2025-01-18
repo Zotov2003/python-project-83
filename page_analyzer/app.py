@@ -23,6 +23,11 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 
+def url_parser(new_url):
+    parsed_url = urlparse(new_url)
+    return f"{parsed_url.scheme}://{parsed_url.netloc}"
+
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
@@ -45,12 +50,10 @@ def add_url():
 
     error = validate(new_url)
     if error:
-        flash(f'{error}', 'danger')
+        flash(error, 'danger')
         message = get_flashed_messages(with_categories=True)
         return render_template('index.html', message=message), 422
-
-    parsed_url = urlparse(new_url)
-    normal_url = f"{parsed_url.scheme}://{parsed_url.netloc}"
+    normal_url = url_parser(new_url)
     db_manager = DatabaseManager()
     url_data = db_manager.get_url_by_name(normal_url)
     if url_data:
