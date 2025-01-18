@@ -11,10 +11,10 @@ from flask import (
     request,
     url_for,
 )
+from tasks import async_check_all_urls
 
 from page_analyzer.db import DatabaseManager
 from page_analyzer.helpers import fetch_url_data
-from page_analyzer.tasks import async_check_all_urls
 from page_analyzer.url_validator import validate
 
 load_dotenv()
@@ -36,7 +36,6 @@ def internal_server_error(e):
 @app.get('/')
 def page_analyzer():
     message = get_flashed_messages(with_categories=True)
-
     return render_template('index.html', message=message)
 
 

@@ -46,7 +46,8 @@ class DatabaseManager:
                     VALUES (%s, %s, %s, %s, %s)
                     """,
                     (url_id, status_code,
-                     page_data['h1'], page_data['title'], page_data['description']),
+                     page_data['h1'], page_data['title'], page_data
+                     ['description']),
                 )
                 conn.commit()
 
@@ -65,7 +66,8 @@ class DatabaseManager:
     def get_checks_desc(self, url_id):
         query = """
             SELECT id, status_code, COALESCE(h1, '') as h1,
-            COALESCE(title, '') as title, COALESCE(description, '') as description,
+            COALESCE(title, '') as title, COALESCE(description, '') as
+            description,
             created_at::text
             FROM url_checks
             WHERE url_id = %s
