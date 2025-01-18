@@ -33,6 +33,7 @@ class DatabaseRepository:
             cur.execute(query, values)
             self.conn.commit()
 
+
 def add_url_to_db(url):
     with DatabaseRepository() as repo:
         repo.execute("INSERT INTO urls (name) VALUES (%s)", (url,))
