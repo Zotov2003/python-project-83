@@ -109,7 +109,7 @@ def add_check(id):
     if status_code == 0:
         flash('Произошла ошибка при проверке', 'danger')
     else:
-        DatabaseManager.add_check_to_db(id, status_code, page_data)
+        db_manager.add_check_to_db(id, status_code, page_data)
         flash('Страница успешно проверена', 'success')
 
     return redirect(url_for('show_url', id=id))
