@@ -12,14 +12,7 @@ from flask import (
     url_for,
 )
 
-from page_analyzer.db import (
-    add_check_to_db,
-    add_url_to_db,
-    get_checks_desc,
-    get_url_by_id,
-    get_url_by_name,
-    get_urls_with_latest_check,
-)
+from page_analyzer.db import DatabaseManager
 from page_analyzer.helpers import fetch_url_data
 from page_analyzer.tasks import async_check_all_urls
 from page_analyzer.url_validator import validate
@@ -60,13 +53,13 @@ def add_url():
     parsed_url = urlparse(new_url)
     normal_url = f"{parsed_url.scheme}://{parsed_url.netloc}"
 
-    url_data = get_url_by_name(normal_url)
+    url_data = DatabaseManager.get_url_by_name(normal_url)
     if url_data:
         flash('Страница уже существует', 'primary')
         return redirect(url_for('show_url', id=url_data.id))
 
-    add_url_to_db(normal_url)
-    new_url_data = get_url_by_name(normal_url)
+    DatabaseManager.add_url_to_db(normal_url)
+    new_url_data = DatabaseManager.get_url_by_name(normal_url)
 
     flash('Страница успешно добавлена', 'success')
     return redirect(url_for('show_url', id=new_url_data.id))
@@ -74,7 +67,7 @@ def add_url():
 
 @app.get('/urls')
 def show_all_urls():
-    all_urls = get_urls_with_latest_check()
+    all_urls = DatabaseManager.get_urls_with_latest_check()
     message = get_flashed_messages(with_categories=True)
     return render_template('urls.html', all_urls=all_urls, message=message)
 
@@ -89,11 +82,11 @@ def check_all_urls():
 
 @app.get('/urls/<int:id>')
 def show_url(id):
-    url_data = get_url_by_id(id)
+    url_data = DatabaseManager.get_url_by_id(id)
     if not url_data:
         return render_template('404.html'), 404
 
-    all_checks = get_checks_desc(id)
+    all_checks = DatabaseManager.get_checks_desc(id)
     message = get_flashed_messages(with_categories=True)
     return render_template(
         'url.html',
@@ -105,7 +98,7 @@ def show_url(id):
 
 @app.post('/urls/<id>/checks')
 def add_check(id):
-    url = get_url_by_id(id)
+    url = DatabaseManager.get_url_by_id(id)
     if not url:
         return render_template('404.html'), 404
 
@@ -114,7 +107,7 @@ def add_check(id):
     if status_code == 0:
         flash('Произошла ошибка при проверке', 'danger')
     else:
-        add_check_to_db(id, status_code, page_data)
+        DatabaseManager.add_check_to_db(id, status_code, page_data)
         flash('Страница успешно проверена', 'success')
 
     return redirect(url_for('show_url', id=id))
