@@ -10,7 +10,7 @@ CELERY_RESULT_BACKEND = os.getenv('REDIS_URL')
 
 def make_celery():
     celery = Celery(
-        main='page_analyzer',
+        main='page_analyzer13',
         broker=CELERY_BROKER_URL,
         backend=CELERY_RESULT_BACKEND
     )
