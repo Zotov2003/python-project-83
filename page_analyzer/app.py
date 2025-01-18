@@ -15,6 +15,7 @@ from flask import (
 from page_analyzer.db import DatabaseManager
 from page_analyzer.helpers import fetch_url_data
 from page_analyzer.tasks import async_check_all_urls
+
 from page_analyzer.url_validator import validate
 
 load_dotenv()
