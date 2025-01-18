@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 
+
 def parse_page(response_text):
     html_data = BeautifulSoup(response_text, 'html.parser')
     title = html_data.title.string if html_data.title else None
