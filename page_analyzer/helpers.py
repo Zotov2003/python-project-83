@@ -13,6 +13,7 @@ def fetch_url_data(url):
     try:
         page_data = parse_page(response.text)
     except Exception as e:
-        return 0, {'title': '', 'h1': '', 'description': f'Ошибка парсинга: {e}'}
+        return 0, {'title': '', 'h1': '',
+                   'description': f'Ошибка парсинга: {e}'}
 
     return response.status_code, page_data
