@@ -11,7 +11,7 @@ from flask import (
     request,
     url_for,
 )
-from tasks import async_check_all_urls
+from page_analyzer.tasks import async_check_all_urls
 
 from page_analyzer.db import DatabaseManager
 from page_analyzer.helpers import fetch_url_data
