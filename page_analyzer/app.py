@@ -45,7 +45,6 @@ def add_url():
     error = validate(new_url)
     if error:
         flash(error, 'danger')
-        # message = get_flashed_messages(with_categories=True)
         return render_template('index.html'), 422
     normal_url = url_parser(new_url)
     db_manager = DatabaseManager()
@@ -53,12 +52,10 @@ def add_url():
     if url_data:
         flash('Страница уже существует', 'primary')
         return redirect(url_for('show_url', id=url_data.id))
-
-    db_manager.add_url_to_db(normal_url)
-    new_url_data = db_manager.get_url_by_name(normal_url)
-
-    flash('Страница успешно добавлена', 'success')
-    return redirect(url_for('show_url', id=new_url_data.id))
+    else:
+        new_url_data = db_manager.add_url_to_db(normal_url)
+        flash('Страница успешно добавлена', 'success')
+        return redirect(url_for('show_url', id=new_url_data[0]))
 
 
 @app.get('/urls')
