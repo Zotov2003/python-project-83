@@ -4,7 +4,6 @@ from dotenv import load_dotenv
 from flask import (
     Flask,
     flash,
-    get_flashed_messages,
     redirect,
     render_template,
     request,
@@ -107,7 +106,8 @@ def add_check(id):
         # return redirect(url_for('show_url', id=id))
 
     page_data = parse_html_data(html_content)
-    if 'description' in page_data and 'Ошибка парсинга' in page_data['description']:
+    if 'description' in page_data and\
+            'Ошибка парсинга' in page_data['description']:
         flash('Произошла ошибка при парсинге страницы', 'danger')
         # return redirect(url_for('show_url', id=id))
 
