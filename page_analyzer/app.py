@@ -35,8 +35,8 @@ def internal_server_error(e):
 
 @app.get('/')
 def page_analyzer():
-    message = get_flashed_messages(with_categories=True)
-    return render_template('index.html', message=message)
+    # message = get_flashed_messages(with_categories=True)
+    return render_template('index.html')
 
 
 @app.post('/urls')
@@ -46,8 +46,8 @@ def add_url():
     error = validate(new_url)
     if error:
         flash(error, 'danger')
-        message = get_flashed_messages(with_categories=True)
-        return render_template('index.html', message=message), 422
+        # message = get_flashed_messages(with_categories=True)
+        return render_template('index.html'), 422
     normal_url = url_parser(new_url)
     db_manager = DatabaseManager()
     url_data = db_manager.get_url_by_name(normal_url)
@@ -66,8 +66,8 @@ def add_url():
 def show_all_urls():
     db_manager = DatabaseManager()
     all_urls = db_manager.get_urls_with_latest_check()
-    message = get_flashed_messages(with_categories=True)
-    return render_template('urls.html', all_urls=all_urls, message=message)
+    # message = get_flashed_messages(with_categories=True)
+    return render_template('urls.html', all_urls=all_urls)
 
 
 @app.post('/urls/checks')
@@ -86,12 +86,11 @@ def show_url(id):
         return render_template('404.html'), 404
 
     all_checks = db_manager.get_checks_desc(id)
-    message = get_flashed_messages(with_categories=True)
+    # message = get_flashed_messages(with_categories=True)
     return render_template(
         'url.html',
         url_data=url_data,
-        all_checks=all_checks,
-        message=message
+        all_checks=all_checks
     )
 
 
@@ -108,8 +107,7 @@ def add_check(id):
         # return redirect(url_for('show_url', id=id))
 
     page_data = parse_html_data(html_content)
-    if 'description' in page_data and \
-            'Ошибка парсинга' in page_data['description']:
+    if 'description' in page_data and 'Ошибка парсинга' in page_data['description']:
         flash('Произошла ошибка при парсинге страницы', 'danger')
         # return redirect(url_for('show_url', id=id))
 
