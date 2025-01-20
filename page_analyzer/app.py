@@ -105,7 +105,7 @@ def add_check(id):
 
     status_code, html_content = fetch_url_data(url[0].name)
     if status_code == 0:
-        flash('Произошла ошибка при HTTP-запросе', 'danger')
+        flash('Произошла ошибка при проверке', 'danger')
         return redirect(url_for('show_url', id=id))
 
     page_data = parse_html_data(html_content)
