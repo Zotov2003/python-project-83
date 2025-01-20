@@ -1,7 +1,5 @@
 import requests
 
-from page_analyzer.html_parser import parse_page
-
 
 def fetch_url_data(url):
     try:
@@ -18,9 +16,13 @@ def parse_html_data(html_content):
         soup = BeautifulSoup(html_content, 'html.parser')
         title = soup.title.string if soup.title else ''
         h1 = soup.find('h1').string if soup.find('h1') else ''
-        description = soup.find('meta', attrs={'name': 'description'})['content'] if soup.find('meta', attrs={'name': 'description'}) else ''
+        description = soup.find('meta', attrs={'name': 'description'})[
+            'content'] \
+            if soup.find('meta', attrs={'name': 'description'}) else ''
         return {'title': title, 'h1': h1, 'description': description}
     except AttributeError as e:
-        return {'title': '', 'h1': '', 'description': f'Ошибка парсинга HTML: {e}'}
+        return \
+            {'title': '', 'h1': '', 'description': f'Ошибка парсинга HTML: {e}'}
     except Exception as e:
-        return {'title': '', 'h1': '', 'description': f'Неизвестная ошибка при парсинге: {e}'}
+        return {'title': '', 'h1': '',
+                'description': f'Неизвестная ошибка при парсинге: {e}'}

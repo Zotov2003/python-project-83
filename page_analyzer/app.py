@@ -1,6 +1,5 @@
 import os
 
-
 from dotenv import load_dotenv
 from flask import (
     Flask,
@@ -12,10 +11,10 @@ from flask import (
     url_for,
 )
 
-from page_analyzer.url_parser import url_parser
 from page_analyzer.db import DatabaseManager
 from page_analyzer.helpers import fetch_url_data, parse_html_data
 from page_analyzer.tasks import async_check_all_urls
+from page_analyzer.url_parser import url_parser
 from page_analyzer.url_validator import validate
 
 load_dotenv()
@@ -109,7 +108,8 @@ def add_check(id):
         # return redirect(url_for('show_url', id=id))
 
     page_data = parse_html_data(html_content)
-    if 'description' in page_data and 'Ошибка парсинга' in page_data['description']:
+    if 'description' in page_data and \
+            'Ошибка парсинга' in page_data['description']:
         flash('Произошла ошибка при парсинге страницы', 'danger')
         # return redirect(url_for('show_url', id=id))
 
