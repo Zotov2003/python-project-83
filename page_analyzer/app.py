@@ -106,12 +106,12 @@ def add_check(id):
     status_code, html_content = fetch_url_data(url[0].name)
     if status_code == 0:
         flash('Произошла ошибка при проверке', 'danger')
-        return redirect(url_for('show_url', id=id))
+        # return redirect(url_for('show_url', id=id))
 
     page_data = parse_html_data(html_content)
     if 'description' in page_data and 'Ошибка парсинга' in page_data['description']:
         flash('Произошла ошибка при парсинге страницы', 'danger')
-        return redirect(url_for('show_url', id=id))
+        # return redirect(url_for('show_url', id=id))
 
     db_manager.add_check_to_db(id, status_code, page_data)
     flash('Страница успешно проверена', 'success')
