@@ -1,5 +1,5 @@
 import os
-from urllib.parse import urlparse
+
 
 from dotenv import load_dotenv
 from flask import (
@@ -12,8 +12,9 @@ from flask import (
     url_for,
 )
 
+from page_analyzer.url_parser import url_parser
 from page_analyzer.db import DatabaseManager
-from page_analyzer.helpers import fetch_url_data
+from page_analyzer.helpers import fetch_url_data, parse_html_data
 from page_analyzer.tasks import async_check_all_urls
 from page_analyzer.url_validator import validate
 
@@ -21,11 +22,6 @@ load_dotenv()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-
-
-def url_parser(new_url):
-    parsed_url = urlparse(new_url)
-    return f"{parsed_url.scheme}://{parsed_url.netloc}"
 
 
 @app.errorhandler(404)
@@ -107,12 +103,17 @@ def add_check(id):
     if not url:
         return render_template('404.html'), 404
 
-    status_code, page_data = fetch_url_data(url[0].name)
-
+    status_code, html_content = fetch_url_data(url[0].name)
     if status_code == 0:
-        flash('Произошла ошибка при проверке', 'danger')
-    else:
-        db_manager.add_check_to_db(id, status_code, page_data)
-        flash('Страница успешно проверена', 'success')
+        flash('Произошла ошибка при HTTP-запросе', 'danger')
+        return redirect(url_for('show_url', id=id))
+
+    page_data = parse_html_data(html_content)
+    if 'description' in page_data and 'Ошибка парсинга' in page_data['description']:
+        flash('Произошла ошибка при парсинге страницы', 'danger')
+        return redirect(url_for('show_url', id=id))
+
+    db_manager.add_check_to_db(id, status_code, page_data)
+    flash('Страница успешно проверена', 'success')
 
     return redirect(url_for('show_url', id=id))
