@@ -34,7 +34,6 @@ def internal_server_error(e):
 
 @app.get('/')
 def page_analyzer():
-    # message = get_flashed_messages(with_categories=True)
     return render_template('index.html')
 
 
@@ -62,7 +61,6 @@ def add_url():
 def show_all_urls():
     db_manager = DatabaseManager()
     all_urls = db_manager.get_urls_with_latest_check()
-    # message = get_flashed_messages(with_categories=True)
     return render_template('urls.html', all_urls=all_urls)
 
 
@@ -82,7 +80,6 @@ def show_url(id):
         return render_template('404.html'), 404
 
     all_checks = db_manager.get_checks_desc(id)
-    # message = get_flashed_messages(with_categories=True)
     return render_template(
         'url.html',
         url_data=url_data,
@@ -100,13 +97,11 @@ def add_check(id):
     status_code, html_content = fetch_url_data(url[0].name)
     if status_code == 0:
         flash('Произошла ошибка при проверке', 'danger')
-        # return redirect(url_for('show_url', id=id))
 
     page_data = parse_html_data(html_content)
     if 'description' in page_data and\
             'Ошибка парсинга' in page_data['description']:
         flash('Произошла ошибка при парсинге страницы', 'danger')
-        # return redirect(url_for('show_url', id=id))
 
     db_manager.add_check_to_db(id, status_code, page_data)
     flash('Страница успешно проверена', 'success')
