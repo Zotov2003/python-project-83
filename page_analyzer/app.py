@@ -1,3 +1,4 @@
+import requests
 import os
 
 from dotenv import load_dotenv
@@ -94,10 +95,16 @@ def add_check(id):
     if not url:
         return render_template('404.html'), 404
 
-    status_code, html_content = fetch_url_data(url[0].name)
+    try:
+        status_code, html_content = fetch_url_data(url[0].name)
+    except requests.exceptions.RequestException as e:
+        error_message = f'Произошла ошибка при проверке: {e}'
+        flash(error_message, 'danger')
+        return redirect(url_for('show_url', id=id))
+
+
     if status_code != 200:
-        error_message = \
-            f'Произошла ошибка при проверке: статус ответа {status_code}'
+        error_message = f'Произошла ошибка при проверке: статус ответа {status_code}'
         flash(error_message, 'danger')
         return redirect(url_for('show_url', id=id))
 
