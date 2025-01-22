@@ -1,4 +1,5 @@
 import requests
+from bs4 import BeautifulSoup
 
 
 def fetch_url_data(url):
@@ -12,7 +13,6 @@ def fetch_url_data(url):
 
 def parse_html_data(html_content):
     try:
-        from bs4 import BeautifulSoup
         soup = BeautifulSoup(html_content, 'html.parser')
         title = soup.title.string if soup.title else ''
         h1 = soup.find('h1').string if soup.find('h1') else ''
