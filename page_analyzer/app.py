@@ -104,7 +104,8 @@ def add_check(id):
 
 
     if status_code != 200:
-        error_message = f'Произошла ошибка при проверке: статус ответа {status_code}'
+        error_message \
+            = f'Произошла ошибка при проверке: статус ответа {status_code}'
         flash(error_message, 'danger')
         return redirect(url_for('show_url', id=id))
 
