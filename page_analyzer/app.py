@@ -87,22 +87,23 @@ def show_url(id):
     )
 
 
-@app.post('/urls/<id>/checks')
+@app.post('/urls/<int:id>/checks')
 def add_check(id):
     db_manager = DatabaseManager()
     url = db_manager.get_url_by_id(id)
     if not url:
         return render_template('404.html'), 404
 
-    try:
-        status_code, html_content = fetch_url_data(url[0].name)
-    except status_code == 0:
-        flash('Произошла ошибка при проверке', 'danger')
+    status_code, html_content = fetch_url_data(url[0].name)
+    if status_code != 200:
+        error_message = \
+            f'Произошла ошибка при проверке: статус ответа {status_code}'
+        flash(error_message, 'danger')
+        return redirect(url_for('show_url', id=id))
 
     page_data = parse_html_data(html_content)
-    if 'description' in page_data and\
-            'Ошибка парсинга' in page_data['description']:
-        flash('Произошла ошибка при парсинге страницы', 'danger')
+    if 'error' in page_data:
+        flash(page_data['error'], 'danger')
 
     db_manager.add_check_to_db(id, status_code, page_data)
     flash('Страница успешно проверена', 'success')
