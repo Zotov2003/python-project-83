@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 
 def fetch_url_data(url):
     response = requests.get(url, timeout=10)
+    response.raise_for_status()
     return response.status_code, response.text
 
 
