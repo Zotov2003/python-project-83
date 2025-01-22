@@ -22,20 +22,16 @@ class DatabaseManager:
 
     def add_url_to_db(self, url):
         with self.get_connection() as conn:
-            with conn.cursor() as cur:
-                cur.execute("SELECT * FROM urls WHERE name = %s", (url,))
-                existing_url = cur.fetchone()
-                if existing_url:
-                    return existing_url
-                cur.execute(
-                    """
-                    INSERT INTO urls (name) VALUES (%s) RETURNING id, name
-                    """,
-                    (url,)
-                )
-                new_url_data = cur.fetchone()
-                conn.commit()
-                return new_url_data
+            cur = conn.cursor()
+            cur.execute(
+                """
+                INSERT INTO urls (name) VALUES (%s) RETURNING id, name
+                """,
+                (url,)
+            )
+            new_url_data = cur.fetchone()
+            conn.commit()
+            return new_url_data
 
     def get_url_by_name(self, url):
         with self.get_connection() as conn:
