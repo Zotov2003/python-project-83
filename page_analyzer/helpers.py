@@ -3,16 +3,9 @@ from bs4 import BeautifulSoup
 
 
 def fetch_url_data(url):
-    try:
-        response = requests.get(url, timeout=10)
-        response.raise_for_status()
-        return response.status_code, response.text
-    except requests.exceptions.Timeout as e:
-        return 408, f'Таймаут запроса: {e}'
-    except requests.exceptions.HTTPError as e:
-        return e.response.status_code, f'HTTP ошибка {e.response.status_code}: {e.response.text}'
-    except requests.exceptions.RequestException as e:
-        return 500, f'Общая ошибка запроса: {e}'
+    response = requests.get(url, timeout=10)
+    response.raise_for_status()
+    return response.status_code, response.text
 
 
 def parse_html_data(html_content):

@@ -1,4 +1,5 @@
 import os
+import requests
 
 from dotenv import load_dotenv
 from flask import (
@@ -94,13 +95,14 @@ def add_check(id):
     if not url:
         return render_template('404.html'), 404
 
-    status_code, html_content = fetch_url_data(url[0].name)
-    if status_code == 0:
-        flash('Произошла ошибка при проверке', 'danger')
+    try:
+        status_code, html_content = fetch_url_data(url[0].name)
+    except requests.exceptions.RequestException as e:
+        flash(f'Произошла ошибка при проверке: {e}', 'danger')
+        return redirect(url_for('show_url', id=id))
 
     page_data = parse_html_data(html_content)
-    if 'description' in page_data and\
-            'Ошибка парсинга' in page_data['description']:
+    if 'description' in page_data and 'Ошибка парсинга' in page_data['description']:
         flash('Произошла ошибка при парсинге страницы', 'danger')
 
     db_manager.add_check_to_db(id, status_code, page_data)
